@@ -5,7 +5,7 @@ import GalleryCanvas from './components/GalleryCanvas';
 import PhotoModal from './components/PhotoModal';
 import InfoModal from './components/InfoModal';
 
-const featuredTags = ['sky', 'insects', 'flowers'];
+const featuredTags = ['skyporn', 'insects', 'flowers'];
 
 function App() {
   const [activeTag, setActiveTag] = useState(null);

@@ -85,7 +85,7 @@ for (const file of selected) {
         role: 'user', content: [
           {
             type: 'input_text',
-            text: `Describe this photograph using only what is visible. Return a natural description (max ${descriptionLimit} characters), exactly 10 distinct reusable lowercase tags (no #), a concise subject identification (max ${subjectLimit} characters), a short mood or lighting description (max ${moodLimit} characters), and three dominant image colours as #RRGGBB hex values ordered by prominence. For animals or plants, identify the species only when visually supported; otherwise use a broader subject (e.g. bee, flowering plant). For sky photographs, name the visible setting or environment (e.g. sunset over a city skyline). Never invent a location, date, or circumstances. Include "sky", "insects", and "flowers" as tags whenever each is relevant.`
+            text: `Describe this photograph using only what is visible. Return a natural description (max ${descriptionLimit} characters), exactly 10 distinct reusable lowercase tags (no #), a concise subject identification (max ${subjectLimit} characters), a short mood or lighting description (max ${moodLimit} characters), and three dominant image colours as #RRGGBB hex values ordered by prominence. For animals or plants, identify the species only when visually supported; otherwise use a broader subject (e.g. bee, flowering plant). For sky photographs, name the visible setting or environment (e.g. sunset over a city skyline). Never invent a location, date, or circumstances. Include "skyporn", "insects", and "flowers" as tags whenever each is relevant.`
           },
           {type: 'input_image', image_url: `data:image/webp;base64,${imageData.toString('base64')}`, detail: 'high'},
         ]
