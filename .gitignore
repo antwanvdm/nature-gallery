@@ -1,0 +1,9 @@
+node_modules/
+dist/
+input-images/
+public/gallery-images/
+.env
+.gallery-images-*/
+.DS_Store
+.idea
+.vscode
