@@ -20,6 +20,7 @@ function App() {
     const searchMatch = !query || `${image.description} ${image.tags.join(' ')} ${image.subject ?? ''} ${image.mood ?? ''} ${image.dominantColors.join(' ')}`.toLowerCase().includes(query.toLowerCase());
     return tagMatch && searchMatch;
   }), [activeTag, query]);
+  const orderedTags = [...featuredTags.filter((tag) => popularTags.includes(tag)), ...popularTags.filter((tag) => !featuredTags.includes(tag))];
 
   return (
     <main className="app-shell">
@@ -36,7 +37,7 @@ function App() {
                 {featuredTags.filter((tag) => popularTags.includes(tag)).map((tag) => <button key={tag} className={activeTag === tag ? 'filter-chip active' : 'filter-chip'} onClick={() => setActiveTag(tag)}>#{tag}</button>)}
               </div>
             </div>
-            <button className={`filter-toggle ${filtersOpen ? 'active' : ''}`} onClick={() => setFiltersOpen(!filtersOpen)} aria-expanded={filtersOpen} aria-controls="all-tag-filters">
+            <button className={`filter-toggle ${filtersOpen ? 'active' : ''}`} onClick={() => { setFiltersOpen(!filtersOpen); setSearchOpen(false); }} aria-expanded={filtersOpen} aria-controls="all-tag-filters">
               <SlidersHorizontal size={15}/> Filters{activeTag ? ` · #${activeTag}` : ''}
             </button>
             {filtersOpen && <div id="all-tag-filters" className="filter-popover">
@@ -49,7 +50,7 @@ function App() {
                   setFiltersOpen(false);
                 }}>All moments
                 </button>
-                {popularTags.map((tag) => <button key={tag} className={activeTag === tag ? 'filter-chip active' : 'filter-chip'} onClick={() => {
+                {orderedTags.map((tag) => <button key={tag} className={activeTag === tag ? 'filter-chip active' : 'filter-chip'} onClick={() => {
                   setActiveTag(tag);
                   setFiltersOpen(false);
                 }}>#{tag}</button>)}
@@ -63,6 +64,7 @@ function App() {
             {searchOpen && <input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search moments" aria-label="Search moments"/>}
             <button className="icon-button" onClick={() => {
               setSearchOpen(!searchOpen);
+              setFiltersOpen(false);
               if (searchOpen) setQuery('');
             }} aria-label={searchOpen ? 'Close search' : 'Search'}>
               {searchOpen ? <X size={18}/> : <Search size={18}/>}

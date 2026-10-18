@@ -16,6 +16,7 @@ function PhotoModal({image, onClose}) {
   if (!image) return null;
 
   const updateLens = (event) => {
+    if (event.pointerType === 'touch') event.preventDefault();
     const bounds = event.currentTarget.getBoundingClientRect();
     const x = Math.min(Math.max(event.clientX - bounds.left, 0), bounds.width);
     const y = Math.min(Math.max(event.clientY - bounds.top, 0), bounds.height);
@@ -23,7 +24,10 @@ function PhotoModal({image, onClose}) {
   };
 
   const startTouchZoom = (event) => {
-    if (event.pointerType === 'touch') event.currentTarget.setPointerCapture(event.pointerId);
+    if (event.pointerType === 'touch') {
+      event.preventDefault();
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
     updateLens(event);
   };
 
@@ -40,7 +44,7 @@ function PhotoModal({image, onClose}) {
       <button className="photo-modal-close" onClick={onClose} aria-label="Close photo"><X size={21}/></button>
       <div className="photo-modal-content">
         <div className="photo-modal-image-wrap">
-          <div className="photo-zoom-area" onPointerDown={startTouchZoom} onPointerMove={updateLens} onPointerLeave={() => setLens(null)} onPointerUp={stopTouchZoom} onPointerCancel={stopTouchZoom}>
+          <div className="photo-zoom-area" onContextMenu={(event) => event.preventDefault()} onPointerDown={startTouchZoom} onPointerMove={updateLens} onPointerLeave={() => setLens(null)} onPointerUp={stopTouchZoom} onPointerCancel={stopTouchZoom}>
             <img className="photo-modal-image" src={image.fullSrc} alt={image.description}/>
             {lens && <div className="photo-magnifier" aria-hidden="true" style={{
               left: lens.x,
