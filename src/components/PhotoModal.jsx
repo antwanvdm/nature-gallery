@@ -20,7 +20,14 @@ function PhotoModal({image, onClose}) {
     const bounds = event.currentTarget.getBoundingClientRect();
     const x = Math.min(Math.max(event.clientX - bounds.left, 0), bounds.width);
     const y = Math.min(Math.max(event.clientY - bounds.top, 0), bounds.height);
-    setLens({x, y, width: bounds.width, height: bounds.height});
+    setLens({
+      x,
+      y,
+      width: bounds.width,
+      height: bounds.height,
+      isTouch: event.pointerType === 'touch',
+      isNearTop: y < 210,
+    });
   };
 
   const startTouchZoom = (event) => {
@@ -43,10 +50,12 @@ function PhotoModal({image, onClose}) {
     <section className="photo-modal" role="dialog" aria-modal="true" aria-label="Photo details">
       <button className="photo-modal-close" onClick={onClose} aria-label="Close photo"><X size={21}/></button>
       <div className="photo-modal-content">
-        <div className="photo-modal-image-wrap">
+        <div className="photo-modal-image-wrap" style={{
+          background: `linear-gradient(rgba(255, 253, 248, .38), rgba(255, 253, 248, .38)), linear-gradient(135deg, ${image.dominantColors[0] ?? '#eee1d0'} 0%, ${image.dominantColors[1] ?? image.dominantColors[0] ?? '#eee1d0'} 52%, ${image.dominantColors[2] ?? image.dominantColors[0] ?? '#eee1d0'} 100%)`
+        }}>
           <div className="photo-zoom-area" onContextMenu={(event) => event.preventDefault()} onPointerDown={startTouchZoom} onPointerMove={updateLens} onPointerLeave={() => setLens(null)} onPointerUp={stopTouchZoom} onPointerCancel={stopTouchZoom}>
             <img className="photo-modal-image" src={image.fullSrc} alt={image.description}/>
-            {lens && <div className="photo-magnifier" aria-hidden="true" style={{
+            {lens && <div className={`photo-magnifier${lens.isTouch ? ' is-touch' : ''}${lens.isNearTop ? ' is-near-top' : ''}`} aria-hidden="true" style={{
               left: lens.x,
               top: lens.y,
               backgroundImage: `url(${image.fullSrc})`,

@@ -486,6 +486,18 @@ h1 {
   z-index: 2;
 }
 
+@media (max-width: 800px) {
+  .photo-magnifier.is-touch {
+    height: 175px;
+    transform: translate(-50%, calc(-50% - 118px));
+    width: 175px;
+  }
+
+  .photo-magnifier.is-touch.is-near-top {
+    transform: translate(-50%, calc(-50% + 118px));
+  }
+}
+
 .photo-zoom-hint {
   align-items: center;
   background: rgba(61, 43, 31, .72);
