@@ -766,7 +766,8 @@ h1 {
   }
 }
 
-@media (max-width: 760px) {
+/* Keep the full tag row only when all four base filters fit beside the header actions. */
+@media (max-width: 1250px) {
   .topbar {
     padding: 14px;
   }
@@ -810,7 +811,7 @@ h1 {
     max-width: calc(100vw - 290px);
   }
 
-  .category-filters .filter-chip:nth-child(n+3) {
+  .popular-filters {
     display: none;
   }
 
@@ -819,11 +820,9 @@ h1 {
   }
 
   .filter-toggle {
-    font-size: 0;
     height: 38px;
     justify-content: center;
-    padding: 0;
-    width: 38px;
+    padding: 0 13px;
   }
 
   .filter-toggle svg {
@@ -845,10 +844,6 @@ h1 {
     padding: 8px 11px;
   }
 
-  .canvas-caption span+span, .canvas-caption a {
-    display: none;
-  }
-
   .photo-card {
     border-width: 5px;
   }
@@ -858,7 +853,8 @@ h1 {
   }
 }
 
-@media (max-width: 480px) {
+/* Use the floating mobile controls before the header actions can collide with the title. */
+@media (max-width: 700px) {
   .topbar {
     padding: 10px;
   }
@@ -887,7 +883,8 @@ h1 {
 
   .filter-toggle {
     height: 38px;
-    width: 38px;
+    padding: 0 13px;
+    width: auto;
   }
 
   .header-actions .info-button {
@@ -924,5 +921,9 @@ h1 {
   .search-wrap.is-open input {
     padding-right: 54px;
     width: 100%;
+  }
+
+  .canvas-caption span+span, .canvas-caption a {
+    display: none;
   }
 }

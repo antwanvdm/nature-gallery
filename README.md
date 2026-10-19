@@ -1,11 +1,94 @@
 # Wonder Field
 
-Install dependencies with `npm install`, then run `npm run dev`.
+Wonder Field is a personal collection of nature photography created by me. It is a place for the small, beautiful things noticed outside to live together on their own terms, without going back to Instagram. Visit the live site
+at [wonder-field.antwan.eu](https://wonder-field.antwan.eu/).
 
-## Images and metadata
+The collection brings back my former **#skyporn** series alongside a more recent fascination with insects, flowers, and the everyday wonder they hold. Every photograph was taken with a phone: older images with a OnePlus 5 or OnePlus 8T, and newer
+ones with a OnePlus 12.
 
-Add photos (including HEIC/HEIF on macOS) to `input-images/` and run `npm run images`. This produces one 960px-wide WebP for the grid (`-grid.webp`) and one full-resolution WebP for the modal in `public/gallery-images/`. It also updates `src/data/gallery-images.json`, so new images automatically appear in the gallery—no manual data entry is required. Subsequent runs convert only images missing either WebP; `npm run images -- --rebuild` reconverts all. Stale generated WebPs are removed after a successful run. On macOS, HEIC files are decoded with `sips` if Sharp cannot read them.
+## Features
 
-For AI-generated descriptions (up to 180 characters), ten reusable hashtags, a tentative subject or visible setting, mood/lighting, and three dominant hex colours per image, copy `.env.example` to `.env`, set `OPENAI_API_KEY`, then run `npm run vision -- --test` to analyze **one randomly selected image missing the new fields** and print its result. Test mode sends one paid API request and saves its metadata. The script sends the full-size modal WebP to OpenAI with high image detail for richer visual metadata. Run `npm run vision` to update the remaining images, including older entries with only descriptions and tags: metadata is saved after each photo in `src/data/image-metadata.json`, so later runs skip entries with all new fields. Metadata is keyed by the generated image base name, independent of the source extension. Use `npm run vision -- --all` only to regenerate metadata for every photo regardless of completion; `--test --all` tests a random photo even if all have metadata. Search covers descriptions, tags, subjects, mood, and hex colours. AI identifications and colour estimates may be inaccurate; review generated metadata before publishing. Never put your API key in client-side Vite environment variables.
+- An exploratory, zoomable gallery with a shuffled layout on each visit.
+- Tag filtering and full-text search across generated metadata.
+- Photo detail modals with touch-friendly magnification and a background gradient derived from each image's dominant colours.
+- Keyboard-accessible controls, focus management for modals, and a skip-to-content link.
+- Responsive layouts for desktop and mobile.
 
-Images without AI metadata remain visible with a neutral description and no tags. Additions should be converted with `npm run images` before running `npm run vision`.
+## Technology
+
+The application is a React single-page app built with Vite. Gallery positioning, pan and zoom interactions, filtering, and modal behaviour are implemented client-side. Styling is provided by Tailwind CSS, with additional responsive styles maintained in a single CSS file.
+
+Images are processed locally with Sharp. Each source photo produces:
+
+- a grid-optimised WebP used by the gallery;
+- a full-resolution WebP used in the photo modal.
+
+The optional metadata workflow uses the OpenAI Vision API to generate descriptions, reusable tags, a tentative subject or setting, mood and lighting notes, and three dominant hex colours. This metadata powers filtering, search, colour swatches, and
+the photo-specific modal backgrounds. AI-generated details may be inaccurate and should be reviewed before publishing.
+
+### Packages
+
+- [React](https://www.npmjs.com/package/react) — component-based user interface library.
+- [React DOM](https://www.npmjs.com/package/react-dom) — React renderer for the web.
+- [Vite](https://www.npmjs.com/package/vite) — development server and production build tool.
+- [@vitejs/plugin-react](https://www.npmjs.com/package/@vitejs/plugin-react) — React support for Vite.
+- [Tailwind CSS](https://www.npmjs.com/package/tailwindcss) and [@tailwindcss/vite](https://www.npmjs.com/package/@tailwindcss/vite) — utility-first CSS framework and Vite integration.
+- [Lucide React](https://www.npmjs.com/package/lucide-react) — SVG icon components.
+- [Sharp](https://www.npmjs.com/package/sharp) — local image processing and WebP generation.
+
+## Getting started
+
+Install dependencies and start the development server:
+
+```bash
+npm install
+npm run dev
+```
+
+Create a production build with:
+
+```bash
+npm run build
+```
+
+## Adding images
+
+Add photos to [`input-images/`](./input-images), then generate the gallery assets:
+
+```bash
+npm run images
+```
+
+The generator accepts common image formats, including HEIC/HEIF on macOS. It creates a grid WebP (`-grid.webp`) and a full-resolution modal WebP in [`public/gallery-images/`](./public/gallery-images), then updates [
+`src/data/gallery-images.json`](./src/data/gallery-images.json). New images therefore appear automatically, without manual data entry.
+
+Subsequent runs only convert images missing an output file. Regenerate all assets with:
+
+```bash
+npm run images -- --rebuild
+```
+
+Stale generated WebPs are removed after a successful run. If Sharp cannot decode HEIC files on macOS, the script falls back to `sips`.
+
+## Generating metadata
+
+To use the optional AI metadata workflow, copy `.env.example` to `.env` and set `OPENAI_API_KEY`. Never expose this key through client-side Vite environment variables.
+
+Test the workflow with one randomly selected incomplete image:
+
+```bash
+npm run vision -- --test
+```
+
+This makes one paid API request and saves the resulting metadata. The script sends the full-resolution modal WebP with high image detail for richer results.
+
+Generate metadata for all incomplete images with:
+
+```bash
+npm run vision
+```
+
+Metadata is written incrementally to [`src/data/image-metadata.json`](./src/data/image-metadata.json), so completed entries are skipped in later runs. Entries are keyed by the generated image base name, independently of the source extension. To
+regenerate every entry, use `npm run vision -- --all`; `npm run vision -- --test --all` tests a random image even when all metadata is complete.
+
+Photos without metadata still appear in the gallery with a neutral description and no tags. Convert additions with `npm run images` before generating their metadata.
