@@ -161,6 +161,8 @@ function GalleryCanvas({images, onSelect}) {
       return screenX > -halfWidth && screenX < viewport.width + halfWidth && screenY > -halfHeight && screenY < viewport.height + halfHeight;
     });
   }, [positionedImages, view, viewport]);
+  const initialImageIdRef = useRef(null);
+  if (initialImageIdRef.current === null && positionedImages.length) initialImageIdRef.current = positionedImages[0].id;
 
   const onPointerDown = (event) => {
     if (!isPositioned) return;
@@ -216,7 +218,10 @@ function GalleryCanvas({images, onSelect}) {
       {isPositioned && visibleImages.map((image) => <button key={image.id} className={`photo-card ${image.color}`}
                                                             style={{width: image.width, height: image.height, transform: `translate(${image.position.x - image.width / 2}px, ${image.position.y - image.height / 2}px)`}}
                                                             onClick={(event) => selectImage(event, image)} aria-label={`View photo details: ${image.description}`}>
-        <img src={image.src} alt={image.description} loading="lazy" draggable="false"/>
+        <img src={image.src} alt={image.description}
+             loading={image.id === initialImageIdRef.current ? 'eager' : 'lazy'}
+             fetchPriority={image.id === initialImageIdRef.current ? 'high' : undefined}
+             draggable="false"/>
       </button>)}
     </div>
     {images.length === 0 && <p className="empty-state">No moments found. Try another filter.</p>}

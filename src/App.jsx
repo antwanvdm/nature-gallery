@@ -104,7 +104,7 @@ function App() {
               {searchOpen ? <X size={18}/> : <Search size={18}/>}
             </button>
           </div>
-          <button ref={infoButtonRef} className="info-button" onClick={() => setInfoOpen(true)}><Info size={17}/> <span>About this place</span></button>
+          <button ref={infoButtonRef} className="info-button" aria-label="About this place" onClick={() => setInfoOpen(true)}><Info size={17}/> <span>About this place</span></button>
         </div>
       </header>
 
