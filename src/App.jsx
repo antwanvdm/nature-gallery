@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Bug, Info, Search, SlidersHorizontal, X } from 'lucide-react';
 import { galleryImages, popularTags } from './data/gallery';
 import GalleryCanvas from './components/GalleryCanvas';
@@ -14,6 +14,39 @@ function App() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const filterToggleRef = useRef(null);
+  const infoButtonRef = useRef(null);
+  const selectedPhotoButtonRef = useRef(null);
+
+  const closePhoto = () => {
+    setSelectedImage(null);
+    requestAnimationFrame(() => {
+      if (selectedPhotoButtonRef.current?.isConnected) selectedPhotoButtonRef.current.focus();
+      selectedPhotoButtonRef.current = null;
+    });
+  };
+
+  const closeInfo = () => {
+    setInfoOpen(false);
+    requestAnimationFrame(() => infoButtonRef.current?.focus());
+  };
+
+  const closeFilters = ({restoreFocus = false} = {}) => {
+    setFiltersOpen(false);
+    if (restoreFocus) requestAnimationFrame(() => filterToggleRef.current?.focus());
+  };
+
+  useEffect(() => {
+    if (!filtersOpen) return undefined;
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeFilters({restoreFocus: true});
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [filtersOpen]);
 
   const filteredImages = useMemo(() => galleryImages.filter((image) => {
     const tagMatch = !activeTag || image.tags.includes(activeTag);
@@ -23,7 +56,8 @@ function App() {
   const orderedTags = [...featuredTags.filter((tag) => popularTags.includes(tag)), ...popularTags.filter((tag) => !featuredTags.includes(tag))];
 
   return (
-    <main className="app-shell">
+    <div className="app-shell">
+      <a className="skip-link" href="#main-content">Skip to main content</a>
       <header className="topbar">
         <div className="header-left">
           <div className="brand-block">
@@ -37,22 +71,22 @@ function App() {
                 {featuredTags.filter((tag) => popularTags.includes(tag)).map((tag) => <button key={tag} className={activeTag === tag ? 'filter-chip active' : 'filter-chip'} onClick={() => setActiveTag(tag)}>#{tag}</button>)}
               </div>
             </div>
-            <button className={`filter-toggle ${filtersOpen ? 'active' : ''}`} onClick={() => { setFiltersOpen(!filtersOpen); setSearchOpen(false); }} aria-expanded={filtersOpen} aria-controls="all-tag-filters">
+            <button ref={filterToggleRef} className={`filter-toggle ${filtersOpen ? 'active' : ''}`} onClick={() => { setFiltersOpen(!filtersOpen); setSearchOpen(false); }} aria-expanded={filtersOpen} aria-controls="all-tag-filters">
               <SlidersHorizontal size={15}/> Filters{activeTag ? ` · #${activeTag}` : ''}
             </button>
             {filtersOpen && <div id="all-tag-filters" className="filter-popover">
               <div className="filter-popover-heading"><span>All tags</span>
-                <button onClick={() => setFiltersOpen(false)} aria-label="Close filters"><X size={16}/></button>
+                <button onClick={() => closeFilters({restoreFocus: true})} aria-label="Close filters"><X size={16}/></button>
               </div>
               <div className="all-tag-filters">
                 <button className={!activeTag ? 'filter-chip active' : 'filter-chip'} onClick={() => {
                   setActiveTag(null);
-                  setFiltersOpen(false);
+                  closeFilters({restoreFocus: true});
                 }}>All moments
                 </button>
                 {orderedTags.map((tag) => <button key={tag} className={activeTag === tag ? 'filter-chip active' : 'filter-chip'} onClick={() => {
                   setActiveTag(tag);
-                  setFiltersOpen(false);
+                  closeFilters({restoreFocus: true});
                 }}>#{tag}</button>)}
               </div>
             </div>}
@@ -70,15 +104,20 @@ function App() {
               {searchOpen ? <X size={18}/> : <Search size={18}/>}
             </button>
           </div>
-          <button className="info-button" onClick={() => setInfoOpen(true)}><Info size={17}/> <span>About this place</span></button>
+          <button ref={infoButtonRef} className="info-button" onClick={() => setInfoOpen(true)}><Info size={17}/> <span>About this place</span></button>
         </div>
       </header>
 
-      <GalleryCanvas images={filteredImages} onSelect={setSelectedImage}/>
+      <main id="main-content" tabIndex="-1">
+        <GalleryCanvas images={filteredImages} onSelect={(image, button) => {
+          selectedPhotoButtonRef.current = button;
+          setSelectedImage(image);
+        }}/>
+      </main>
       <footer className="canvas-caption"><span><strong>{filteredImages.length}</strong> moments</span><span>drag to explore <i>·</i> scroll to zoom</span><a href="https://antwan.eu" target="_blank" rel="noreferrer">Created by Antwan</a></footer>
-      <PhotoModal image={selectedImage} onClose={() => setSelectedImage(null)}/>
-      <InfoModal open={infoOpen} onClose={() => setInfoOpen(false)}/>
-    </main>
+      <PhotoModal image={selectedImage} onClose={closePhoto}/>
+      <InfoModal open={infoOpen} onClose={closeInfo}/>
+    </div>
   );
 }
 

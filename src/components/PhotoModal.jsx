@@ -1,11 +1,13 @@
 import { Search, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 function PhotoModal({image, onClose}) {
   const [lens, setLens] = useState(null);
+  const closeButtonRef = useRef(null);
 
   useEffect(() => {
     if (!image) return undefined;
+    closeButtonRef.current?.focus();
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') onClose();
     };
@@ -48,7 +50,7 @@ function PhotoModal({image, onClose}) {
     if (event.target === event.currentTarget) onClose();
   }}>
     <section className="photo-modal" role="dialog" aria-modal="true" aria-label="Photo details">
-      <button className="photo-modal-close" onClick={onClose} aria-label="Close photo"><X size={21}/></button>
+      <button ref={closeButtonRef} className="photo-modal-close" onClick={onClose} aria-label="Close photo"><X size={21}/></button>
       <div className="photo-modal-content">
         <div className="photo-modal-image-wrap" style={{
           background: `linear-gradient(rgba(255, 253, 248, .38), rgba(255, 253, 248, .38)), linear-gradient(135deg, ${image.dominantColors[0] ?? '#eee1d0'} 0%, ${image.dominantColors[1] ?? image.dominantColors[0] ?? '#eee1d0'} 52%, ${image.dominantColors[2] ?? image.dominantColors[0] ?? '#eee1d0'} 100%)`

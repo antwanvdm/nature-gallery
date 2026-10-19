@@ -197,7 +197,7 @@ function GalleryCanvas({images, onSelect}) {
       event.preventDefault();
       return;
     }
-    onSelect(image);
+    onSelect(image, event.currentTarget);
   };
 
   const onWheel = (event) => {
@@ -216,7 +216,7 @@ function GalleryCanvas({images, onSelect}) {
       {isPositioned && visibleImages.map((image) => <button key={image.id} className={`photo-card ${image.color}`}
                                                             style={{width: image.width, height: image.height, transform: `translate(${image.position.x - image.width / 2}px, ${image.position.y - image.height / 2}px)`}}
                                                             onClick={(event) => selectImage(event, image)} aria-label={`View photo details: ${image.description}`}>
-        <img src={image.src} alt="" loading="lazy" draggable="false"/>
+        <img src={image.src} alt={image.description} loading="lazy" draggable="false"/>
       </button>)}
     </div>
     {images.length === 0 && <p className="empty-state">No moments found. Try another filter.</p>}

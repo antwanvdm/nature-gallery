@@ -31,6 +31,23 @@ button {
   background: radial-gradient(circle at 72% 86%, #ffe0ad 0%, transparent 26%), radial-gradient(circle at 6% 12%, #f9efd4 0%, transparent 25%), #fff9f0;
 }
 
+.skip-link {
+  background: #3d3028;
+  border-radius: 0 0 8px 8px;
+  color: #fffaf3;
+  left: 16px;
+  padding: 10px 14px;
+  position: fixed;
+  top: 0;
+  transform: translateY(-100%);
+  transition: transform .2s ease;
+  z-index: 20;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 .topbar {
   align-items: flex-start;
   display: flex;
@@ -44,7 +61,7 @@ button {
   z-index: 5;
 }
 
-.topbar > * {
+.topbar>* {
   pointer-events: auto;
 }
 
@@ -369,7 +386,7 @@ h1 {
   font-size: 13px;
 }
 
-.canvas-caption span + span {
+.canvas-caption span+span {
   border-left: 1px solid #e6d4bd;
   color: #8e6247;
   padding-left: 13px;
@@ -451,7 +468,7 @@ h1 {
 
 .photo-zoom-area {
   align-items: center;
-  cursor: crosshair;
+  cursor: none;
   display: flex;
   height: 100%;
   justify-content: center;
@@ -541,7 +558,7 @@ h1 {
   gap: 6px;
 }
 
-.photo-modal-field > span {
+.photo-modal-field>span {
   color: #9a7c69;
   font-size: 11px;
   letter-spacing: .08em;
@@ -689,6 +706,7 @@ h1 {
   from {
     transform: translateX(100%);
   }
+
   to {
     transform: translateX(0);
   }
@@ -699,6 +717,7 @@ h1 {
     opacity: 0;
     transform: translateY(12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -826,7 +845,7 @@ h1 {
     padding: 8px 11px;
   }
 
-  .canvas-caption span + span, .canvas-caption a {
+  .canvas-caption span+span, .canvas-caption a {
     display: none;
   }
 
@@ -873,11 +892,10 @@ h1 {
 
   .header-actions .info-button {
     align-items: center;
-    background: #587254;
+    border: 1px solid rgba(93, 65, 44, .14);
     border-radius: 50%;
     bottom: 14px;
-    box-shadow: 0 8px 24px rgba(87, 46, 20, .18);
-    color: #fffdf8;
+    box-shadow: 0 8px 24px rgba(87, 46, 20, .1);
     display: flex;
     height: 42px;
     justify-content: center;
