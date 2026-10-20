@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Bug, Info, Search, SlidersHorizontal, X } from 'lucide-react';
-import { galleryImages, popularTags } from './data/gallery';
+import { galleryImages, popularTags, spotlightImageId } from './data/gallery';
 import GalleryCanvas from './components/GalleryCanvas';
 import PhotoModal from './components/PhotoModal';
 import InfoModal from './components/InfoModal';
@@ -109,7 +109,7 @@ function App() {
       </header>
 
       <main id="main-content" tabIndex="-1">
-        <GalleryCanvas images={filteredImages} onSelect={(image, button) => {
+        <GalleryCanvas images={filteredImages} spotlightImageId={spotlightImageId} onSelect={(image, button) => {
           selectedPhotoButtonRef.current = button;
           setSelectedImage(image);
         }}/>

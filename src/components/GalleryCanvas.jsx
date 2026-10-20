@@ -73,7 +73,7 @@ const createLayout = (images) => {
   return {images: centeredImages, bounds, tileWidth: bounds.right - bounds.left, tileHeight: bounds.bottom - bounds.top};
 };
 
-function GalleryCanvas({images, onSelect}) {
+function GalleryCanvas({images, spotlightImageId, onSelect}) {
   const viewportRef = useRef(null);
   const worldRef = useRef(null);
   const viewRef = useRef({x: 0, y: 0, scale: 0.72});
@@ -112,11 +112,17 @@ function GalleryCanvas({images, onSelect}) {
     };
   }, []);
 
-  // Shuffle each gallery instance so every photo can become the center anchor on refresh.
-  const shuffledImages = useMemo(() => [...images]
-    .map((image) => ({image, order: Math.random()}))
-    .sort((a, b) => a.order - b.order)
-    .map(({image}) => image), [images]);
+  // Keep the configured spotlight as the centre anchor while shuffling all other photos.
+  const shuffledImages = useMemo(() => {
+    const spotlight = images.find((image) => image.id === spotlightImageId);
+    const shuffled = images
+      .filter((image) => image.id !== spotlightImageId)
+      .map((image) => ({image, order: Math.random()}))
+      .sort((a, b) => a.order - b.order)
+      .map(({image}) => image);
+
+    return spotlight ? [spotlight, ...shuffled] : shuffled;
+  }, [images, spotlightImageId]);
   const layout = useMemo(() => createLayout(shuffledImages), [shuffledImages]);
   const positionedImages = layout.images;
 

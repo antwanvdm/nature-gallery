@@ -8,7 +8,7 @@ ones with a OnePlus 12.
 
 ## Features
 
-- An exploratory, zoomable gallery with a shuffled layout on each visit.
+- An exploratory, zoomable gallery with a shuffled layout on each visit and a configurable centre spotlight.
 - Tag filtering and full-text search across generated metadata.
 - Photo detail modals with touch-friendly magnification and a background gradient derived from each image's dominant colours.
 - Keyboard-accessible controls, focus management for modals, and a skip-to-content link.
@@ -92,3 +92,7 @@ Metadata is written incrementally to [`src/data/image-metadata.json`](./src/data
 regenerate every entry, use `npm run vision -- --all`; `npm run vision -- --test --all` tests a random image even when all metadata is complete.
 
 Photos without metadata still appear in the gallery with a neutral description and no tags. Convert additions with `npm run images` before generating their metadata.
+
+## Choosing the centre spotlight
+
+Set `spotlightImageId` in [`src/data/gallery.js`](./src/data/gallery.js) to the generated base name of the photo that should stay in the centre. The remaining photos continue to shuffle on each visit. The configured photo remains in the collection normally and is only pinned when it is present in the current filters. Also update the preload URL in [`index.html`](./index.html) to match so the browser can discover and prioritise the initial centre image before JavaScript runs.

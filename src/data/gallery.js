@@ -4,6 +4,9 @@ import metadata from './image-metadata.json';
 const colors = ['sun', 'ember', 'leaf', 'sky', 'coral', 'honey'];
 const pendingDescription = 'A moment from the natural world.';
 
+// Change this generated image base name to choose the photo anchored at the gallery centre.
+export const spotlightImageId = 'IMG_20240525_203612';
+
 export const galleryImages = imageBases.map((base, index) => {
   const details = metadata[base] ?? {description: pendingDescription, tags: []};
 
