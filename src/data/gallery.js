@@ -19,6 +19,8 @@ export const galleryImages = imageBases.map((base, index) => {
     subject: details.subject ?? null,
     mood: details.mood ?? null,
     dominantColors: details.colors ?? [],
+    capturedAt: details.capturedAt ?? null,
+    placeName: details.placeName ?? null,
     color: colors[index % colors.length],
     width: index % 5 === 0 ? 310 : index % 3 === 0 ? 230 : 270,
     height: index % 4 === 0 ? 390 : index % 3 === 0 ? 280 : 330,

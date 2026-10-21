@@ -25,7 +25,7 @@ function InfoModal({open, onClose}) {
       <p className="my-2">It is also a way to bring back my former <strong>#skyporn</strong> collection, alongside a more recent fascination with insects, flowers, and the everyday wonder they hold.</p>
       <p>Every photograph here was taken with my phone: older images with a OnePlus 5 or OnePlus 8T, and newer ones with my current OnePlus 12.</p>
       <p className="tech-note"><strong>A small experiment:</strong> I used the OpenAI Vision API (via gpt-6-luna) to generate the textual details and related tags for each photograph. It is a practical way to organize the photographs, evaluate the quality of AI for this use case, and use matching background colours behind each photograph in CSS.</p>
-      <div className="modal-signoff">Wonder Field <span>·</span> <a href="https://antwan.eu" target="_blank" rel="noreferrer">Created by Antwan</a></div>
+      <div className="modal-signoff">Wonder Field <span>·</span> <a href="https://antwan.eu" target="_blank" rel="noreferrer" aria-label="Open Antwans portfolio website (opens in a new tab)">Created by Antwan</a></div>
     </section>
   </div>;
 }

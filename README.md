@@ -35,6 +35,7 @@ the photo-specific modal backgrounds. AI-generated details may be inaccurate and
 - [Tailwind CSS](https://www.npmjs.com/package/tailwindcss) and [@tailwindcss/vite](https://www.npmjs.com/package/@tailwindcss/vite) — utility-first CSS framework and Vite integration.
 - [Lucide React](https://www.npmjs.com/package/lucide-react) — SVG icon components.
 - [Sharp](https://www.npmjs.com/package/sharp) — local image processing and WebP generation.
+- [exifr](https://www.npmjs.com/package/exifr) — local EXIF capture-date and coordinate extraction.
 
 ## Getting started
 
@@ -90,6 +91,24 @@ npm run vision
 
 Metadata is written incrementally to [`src/data/image-metadata.json`](./src/data/image-metadata.json), so completed entries are skipped in later runs. Entries are keyed by the generated image base name, independently of the source extension. To
 regenerate every entry, use `npm run vision -- --all`; `npm run vision -- --test --all` tests a random image even when all metadata is complete.
+
+## Extracting capture dates and locations
+
+Extract each photo's original capture date and coordinates with:
+
+```bash
+npm run metadata
+```
+
+The extractor uses a matching [`input-images/instagram.json`](./input-images/instagram.json) export first, then falls back to source-photo EXIF. It writes only the public-safe `capturedAt`, `placeName`, and capture-date source to [`src/data/image-metadata.json`](./src/data/image-metadata.json), which is bundled into the site. Exact coordinates and their source are written separately to the ignored private file `input-images/image-location-metadata.json`; it must never be imported by client code or copied into `public/`. Add `MAPBOX_ACCESS_TOKEN` to `.env` before running to resolve place names; dates and private coordinates are still saved without it.
+
+Place names prefer a nearby Mapbox park, natural site, monument, museum, or other public attraction when its category identifies it as such. Otherwise, only city and country are stored; street addresses and unrelated businesses are never saved as place names. To replace previously stored place names, run `npm run metadata -- --refresh-places`. This makes new Mapbox lookups for every photo with private coordinates, including manual locations, so review Mapbox usage and your POI storage rights first. The regular command retains existing place names. Review generated names before publishing: proximity alone cannot confirm that a photo was taken inside a named site.
+
+To remove only the extracted date, location, and provenance fields while preserving AI metadata, run:
+
+```bash
+npm run metadata -- --reset
+```
 
 Photos without metadata still appear in the gallery with a neutral description and no tags. Convert additions with `npm run images` before generating their metadata.
 

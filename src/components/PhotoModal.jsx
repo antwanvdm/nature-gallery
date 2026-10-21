@@ -1,4 +1,4 @@
-import { Search, X } from 'lucide-react';
+import { CalendarDays, MapPin, Search, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 function PhotoModal({image, onClose}) {
@@ -16,6 +16,11 @@ function PhotoModal({image, onClose}) {
   }, [image, onClose]);
 
   if (!image) return null;
+
+  const capturedDate = image.capturedAt
+    ? new Intl.DateTimeFormat('en', {day: 'numeric', month: 'long', year: 'numeric'}).format(new Date(image.capturedAt))
+    : null;
+  const hasLocation = Boolean(image.placeName);
 
   const updateLens = (event) => {
     if (event.pointerType === 'touch') event.preventDefault();
@@ -77,6 +82,10 @@ function PhotoModal({image, onClose}) {
             </div>}
             <div className="photo-modal-meta">
               <div className="panel-tags">{image.tags.map((tag) => <span key={tag}>#{tag}</span>)}</div>
+              {(capturedDate || hasLocation) && <div className="photo-capture-details">
+                {capturedDate && <div><CalendarDays size={16} aria-hidden="true"/><time dateTime={image.capturedAt}>{capturedDate}</time></div>}
+                {hasLocation && <div><MapPin size={16} aria-hidden="true"/><span>{image.placeName}</span></div>}
+              </div>}
             </div>
           </div>
           {image.tags.length > 0 && <p className="photo-modal-disclaimer">* Descriptions and details are AI-generated as an experiment and may be inaccurate.</p>}

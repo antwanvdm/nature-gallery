@@ -114,7 +114,7 @@ function App() {
           setSelectedImage(image);
         }}/>
       </main>
-      <footer className="canvas-caption"><span><strong>{filteredImages.length}</strong> moments</span><span>drag to explore <i>·</i> scroll to zoom</span><a href="https://antwan.eu" target="_blank" rel="noreferrer">Created by Antwan</a></footer>
+      <footer className="canvas-caption"><span><strong>{filteredImages.length}</strong> moments</span><span>drag to explore <i>·</i> scroll to zoom</span><a href="https://antwan.eu" target="_blank" rel="noreferrer" aria-label="Open Antwans portfolio website (opens in a new tab)">Created by Antwan</a></footer>
       <PhotoModal image={selectedImage} onClose={closePhoto}/>
       <InfoModal open={infoOpen} onClose={closeInfo}/>
     </div>
